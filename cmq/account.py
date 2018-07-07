@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from cmq.cmq_client import CMQClient
-from queue import Queue
+from cmq.queue import Queue
 from cmq.cmq_tool import CMQLogger
 from cmq.topic import Topic
 from cmq.subscription import Subscription
+
+
 class Account:
     """
     Account类对象不是线程安全的，如果多线程使用，需要每个线程单独初始化Account类对象
@@ -28,21 +30,24 @@ class Account:
         self.secretKey = secretKey
         self.debug = debug
         self.logger = CMQLogger.get_logger()
-        self.cmq_client = CMQClient(host, secretId, secretKey, logger=self.logger)
-        
+        self.cmq_client = CMQClient(
+            host, secretId, secretKey, logger=self.logger)
+
     def set_sign(self, sign='sha256'):
         '''
-          @fucntion set_sign : set sign method 
-          @sign  sha256 or sha1 
+          @fucntion set_sign : set sign method
+          @sign  sha256 or sha1
         '''
         self.cmq_client.set_sign_method(sign)
+
     def set_debug(self, debug):
         self.debug = debug
 
     def set_log_level(self, log_level):
         """ 设置logger的日志级别
             @type log_level: int
-            @param log_level: one of logging.DEBUG,logging.INFO,logging.WARNING,logging.ERROR,logging.CRITICAL
+            @param log_level: one of logging.DEBUG,logging.INFO,
+                logging.WARNING,logging.ERROR,logging.CRITICAL
         """
         CMQLogger.validate_loglevel(log_level)
         self.logger.setLevel(log_level)
@@ -52,7 +57,6 @@ class Account:
         """ 关闭日志打印
         """
         self.cmq_client.close_log()
-
 
     def set_client(self, host, secretId=None, secretKey=None):
         """ 设置访问的url
@@ -73,7 +77,8 @@ class Account:
             secretId = self.secretId
         if secretKey is None:
             secretKey = self.secretKey
-        self.cmq_client = CMQClient(host, secretId, secretKey, logger=self.logger)
+        self.cmq_client = CMQClient(
+            host, secretId, secretKey, logger=self.logger)
 
     def get_queue(self, queue_name):
         """ 获取Account的一个Queue对象
@@ -95,7 +100,6 @@ class Account:
         return self.cmq_client
 
     def list_queue(self, searchWord="", limit=-1, offset=""):
-        
         """ 列出Account的队列
 
             @type searchWord: string
@@ -108,7 +112,8 @@ class Account:
             @param offset: list_queue的起始位置，上次list_queue返回的next_offset
 
             @rtype: tuple
-            @return: QueueURL的列表和下次list queue的起始位置; 如果所有queue都list出来，next_offset为"".
+            @return: QueueURL的列表和下次list queue的起始位置;
+                如果所有queue都list出来，next_offset为"".
         """
         params = {}
         if searchWord != "":
@@ -129,15 +134,14 @@ class Account:
         return (ret_pkg['totalCount'], ret_pkg['queueList'], next_offset)
 
     def get_topic(self, topicName):
-        """get topic 
-            @type topicName :string 
-            @param topicName 
+        """ get topic
+            @type topicName :string
+            @param topicName
             @return Topic object
         """
         return Topic(topicName, self.cmq_client, self.debug)
-    
+
     def list_topic(self, searchWord="", limit=-1, offset=""):
-        
         """ 列出Account的主题
 
             @type searchWord: string
@@ -150,7 +154,8 @@ class Account:
             @param offset: list_topic的起始位置，上次list_topic返回的next_offset
 
             @rtype: tuple
-            @return: topicURL的列表和下次list topic的起始位置; 如果所有topic都list出来，next_offset为"".
+            @return: topicURL的列表和下次list topic的起始位置;
+                如果所有topic都list出来，next_offset为"".
         """
         params = {}
         if searchWord != "":
@@ -170,28 +175,22 @@ class Account:
 
         return (ret_pkg['totalCount'], ret_pkg['topicList'], next_offset)
 
-    
     def get_subscription(self, topicName, subscriptionName):
         ''' 获取订阅
             @type topicName :string
             @param topicName
-            
+
             @type subscriptionName :string
             @param subscriptionName:
-            
-            @return Subscription object
-        
-        '''
-        return Subscription(topicName, subscriptionName, self.cmq_client, self.debug)
-    
-    
-    
 
-    
+            @return Subscription object
+
+        '''
+        return Subscription(
+            topicName, subscriptionName, self.cmq_client, self.debug)
+
     def debuginfo(self, RequestId):
         if self.debug:
-            print "===================DEBUG INFO==================="
-            print "RequestId: %s" % RequestId
-            print "================================================"
-      
-	
+            print("===================DEBUG INFO===================")
+            print("RequestId: %s" % RequestId)
+            print("================================================")

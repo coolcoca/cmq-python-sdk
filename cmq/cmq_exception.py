@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
 class CMQExceptionBase(Exception):
     """
     @type code: int
@@ -8,7 +9,7 @@ class CMQExceptionBase(Exception):
 
     @type message: string
     @param message: 错误描述
-    
+
     @type data: dict
     @param data: 错误数据
     """
@@ -18,10 +19,12 @@ class CMQExceptionBase(Exception):
         self.data = data
 
     def get_info(self):
-        return 'Code:%s, Message:%s, Data:%s\n' % (self.code, self.message, self.data)
+        return 'Code:%s, Message:%s, Data:%s\n' % (
+            self.code, self.message, self.data)
 
     def __str__(self):
         return "CMQExceptionBase  %s" % (self.get_info())
+
 
 class CMQClientException(CMQExceptionBase):
     def __init__(self, message, code=-1, data={}):
@@ -29,7 +32,8 @@ class CMQClientException(CMQExceptionBase):
 
     def __str__(self):
         return "CMQClientException  %s" % (self.get_info())
-    
+
+
 class CMQClientNetworkException(CMQClientException):
     """ 网络异常
 
@@ -40,6 +44,7 @@ class CMQClientNetworkException(CMQClientException):
 
     def __str__(self):
         return "CMQClientNetworkException  %s" % (self.get_info())
+
 
 class CMQClientParameterException(CMQClientException):
     """ 参数格式错误
@@ -52,19 +57,24 @@ class CMQClientParameterException(CMQClientException):
     def __str__(self):
         return "CMQClientParameterException  %s" % (self.get_info())
 
+
 class CMQServerNetworkException(CMQExceptionBase):
     """ 服务器网络异常
     """
-    def __init__(self, status = 200, header = None, data = ""):
-        if header == None:
+    def __init__(self, status=200, header=None, data=""):
+        if header is None:
             header = {}
         self.status = status
         self.header = header
         self.data = data
 
     def __str__(self):
-        return "CMQServerNetworkException Status: %s\nHeader: %s\nData: %s\n" % \
-            (self.status, "\n".join(["%s: %s" % (k,v) for k,v in self.header.items()]), self.data)
+        return "CMQServerNetworkException Status: \
+            %s\nHeader: %s\nData: %s\n" % (
+            self.status,
+            "\n".join(["%s: %s" % (k, v) for k, v in self.header.items()]),
+            self.data)
+
 
 class CMQServerException(CMQExceptionBase):
     """ cmq处理异常
@@ -90,9 +100,5 @@ class CMQServerException(CMQExceptionBase):
         self.request_id = request_id
 
     def __str__(self):
-        return "CMQServerException  %s\nRequestID:%s" % (self.get_info(), self.request_id)
-
-
-
-
-
+        return "CMQServerException %s\nRequestID:%s" % (
+            self.get_info(), self.request_id)
