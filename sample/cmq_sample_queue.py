@@ -18,6 +18,7 @@ endpoint = 'http://cmq-queue-gz.api.tencentyun.com'
 
 # 初始化 my_account, my_queue
 # Account类对象不是线程安全的，如果多线程使用，需要每个线程单独初始化Account类对象
+# threading.local 可以实现线程安全
 my_account = Account(endpoint, secretId, secretKey, debug=True)
 my_account.set_log_level(logging.DEBUG)
 queue_name = sys.argv[1] if len(sys.argv) > 1 else "MySampleQueue"

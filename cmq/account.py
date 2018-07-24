@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import logging
 
 from cmq.cmq_client import CMQClient
 from cmq.queue import Queue
@@ -12,7 +13,7 @@ class Account:
     """
     Account类对象不是线程安全的，如果多线程使用，需要每个线程单独初始化Account类对象
     """
-    def __init__(self, host, secretId, secretKey, debug=False):
+    def __init__(self, host, secretId, secretKey, debug=False, logger=None):
         """
             @type host: string
             @param host: 访问的url，例如：https://cmq-queue-gz.api.qcloud.com
@@ -29,7 +30,7 @@ class Account:
         self.secretId = secretId
         self.secretKey = secretKey
         self.debug = debug
-        self.logger = CMQLogger.get_logger()
+        self.logger = logger or logging.getLogger(__name__)
         self.cmq_client = CMQClient(
             host, secretId, secretKey, logger=self.logger)
 
