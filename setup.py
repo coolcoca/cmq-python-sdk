@@ -8,4 +8,5 @@ setup(
     author_email='xeixxr@gmail.com',
     url='https://github.com/coolcoca/cmq-python-sdk',
     package=['cmq'],
+    zip_safe=False,
 )
