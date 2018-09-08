@@ -28,6 +28,7 @@ class Sign:
 
         if sys.version > '3':
             srcStr = srcStr.encode('utf8')
+            self.secretKey = self.secretKey.encode('utf8')
 
         if sign_method == 'sha1':
             hashed = hmac.new(
